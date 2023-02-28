@@ -42,26 +42,29 @@ class MyTCPHandler(socketserver.BaseRequestHandler):
                 if self.data:
                     print("{} wrote:".format(address[0]))
                     print(self.data)
-                    playerargs = self.data.decode().split(":")
+                    data = self.data.decode().split("/")
+                    for i in range(len(data)-1):
 
-                    if playerargs[0] == "JOIN":
-                        player = Player(random.randint(0,2147483647),0.0,0.0,0.0)
-                        players.append(player)
-                        response :str = "CONNECTED:"+str(player.id)
-                        self.request.sendall(response.encode())
-                    elif playerargs[0] == "DISCONNECT":
-                        response :str = "PLAYERDELETE:"+str(player.id)
-                        send_message_to_clients(response)
-                        print('Player disconnected')
-                        removePlayer(player)
-                        removeClientSocket(self.request)
-                        break
-                    elif playerargs[0] == "POS":
-                       player.x = float(playerargs[1].replace(",","."))
-                       player.y = float(playerargs[2].replace(",","."))
-                       player.r = float(playerargs[3].replace(",","."))
-                    else:
-                       self.request.sendall(b'Error')
+                        playerargs = data[i].split(":")
+
+                        if playerargs[0] == "JOIN":
+                            player = Player(random.randint(0,2147483647),0.0,0.0,0.0)
+                            players.append(player)
+                            response :str = "CONNECTED:"+str(player.id)
+                            self.request.sendall(response.encode())
+                        elif playerargs[0] == "DISCONNECT":
+                            response :str = "PLAYERDELETE:"+str(player.id)
+                            send_message_to_clients(response)
+                            print('Player disconnected')
+                            removePlayer(player)
+                            removeClientSocket(self.request)
+                            break
+                        elif playerargs[0] == "POS":
+                            player.x = float(playerargs[1].replace(",","."))
+                            player.y = float(playerargs[2].replace(",","."))
+                            player.r = float(playerargs[3].replace(",","."))
+                        else:
+                            self.request.sendall(b'Error')
 
         except Exception as e:
             print("Error Disconnecting from server")

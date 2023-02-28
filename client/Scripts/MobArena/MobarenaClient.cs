@@ -39,8 +39,7 @@ public class MobarenaClient : Node2D
 
     public static void SendMessage(string pMessage)
     {
-        byte[] lMessage = Encoding.ASCII.GetBytes(pMessage);
-        stream.Flush();
+        byte[] lMessage = Encoding.ASCII.GetBytes(pMessage+"/");
         stream.Write(lMessage, 0, lMessage.Length);
     }
 
