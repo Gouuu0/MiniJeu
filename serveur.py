@@ -4,31 +4,70 @@ import string
 import threading
 import time
 
-client_sockets = []
+class Player:
+    def __init__(self, id, x, y, r):
+        self.id = id
+        self.x = x
+        self.y = y 
+        self.r = r
 
-def randomword(length):
-   letters = string.ascii_lowercase
-   return ''.join(random.choice(letters) for i in range(length))
+client_sockets = []
+players = []
+
+def removeClientSocket(socket):
+    if socket in client_sockets:
+        client_sockets.remove(socket)
+
+def removePlayer(player):
+    if player in players:
+        players.remove(player)
+
+def send_message_to_clients(message):
+    for client in client_sockets:
+        try:
+            client.sendall(message.encode())
+        except:
+            print('Client disconnected')
+            removeClientSocket(client)
 
 class MyTCPHandler(socketserver.BaseRequestHandler):
     def handle(self):
         # self.request is the TCP socket connected to the client
         address = self.client_address
         client_sockets.append(self.request)
-        while True:
-            self.data = self.request.recv(1024).strip()
-            if self.data:
-                print("{} wrote:".format(address[0]))
-                print(self.data)
+        player = None
+        try:
+            while True:
+                self.data = self.request.recv(4096).strip()
+                if self.data:
+                    print("{} wrote:".format(address[0]))
+                    print(self.data)
+                    playerargs = self.data.decode().split(":")
 
-                if self.data == b'ButtonClicked':
-                    self.request.sendall(b'HIDEBUTTON')
-                elif self.data == b'player_disconnect':
-                    print('Player disconnected')
-                    client_sockets.remove(self.request)
-                    break
-                else:
-                    self.request.sendall(b'Error')
+                    if playerargs[0] == "JOIN":
+                        player = Player(random.randint(0,2147483647),0.0,0.0,0.0)
+                        players.append(player)
+                        response :str = "CONNECTED:"+str(player.id)
+                        self.request.sendall(response.encode())
+                    elif playerargs[0] == "DISCONNECT":
+                        response :str = "PLAYERDELETE:"+str(player.id)
+                        send_message_to_clients(response)
+                        print('Player disconnected')
+                        removePlayer(player)
+                        removeClientSocket(self.request)
+                        break
+                    elif playerargs[0] == "POS":
+                       player.x = float(playerargs[1].replace(",","."))
+                       player.y = float(playerargs[2].replace(",","."))
+                       player.r = float(playerargs[3].replace(",","."))
+                    else:
+                       self.request.sendall(b'Error')
+
+        except Exception as e:
+            print("Error Disconnecting from server")
+            print(e)
+            removePlayer(player)
+            removeClientSocket(self.request)
 
 if __name__ == "__main__":
     HOST, PORT = "0.0.0.0", 6700
@@ -36,17 +75,18 @@ if __name__ == "__main__":
     # Create the server, binding to localhost on port 6700
     with socketserver.ThreadingTCPServer((HOST, PORT), MyTCPHandler) as server:
 
-        def send_message_to_clients():
+        def sendPositionToClient():
             while True:
-                for client in client_sockets:
-                    try:
-                        client.sendall(randomword(10).encode())
-                    except:
-                        print('Client disconnected')
-                        client_sockets.remove(client)
-                time.sleep(1)
+                message :str = "PLAYERS:"
+                for player in players:
+                    message += str(player.id) +"|"+str(player.x).replace(".",",")+"|"+str(player.y).replace(".",",") + "|" + str(player.r).replace(".",",") + ":"
+                
+                message = message[:-1]
+                print(message)
+                send_message_to_clients(message)
+                time.sleep(0.05)
 
-        thread = threading.Thread(target=send_message_to_clients)
+        thread = threading.Thread(target=sendPositionToClient)
         thread.start()
 
         server.serve_forever()

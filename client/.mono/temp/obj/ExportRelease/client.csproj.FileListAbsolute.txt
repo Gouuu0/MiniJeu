@@ -1,0 +1,9 @@
+D:\Mes jeux\MiniJeu\client\.mono\temp\bin\ExportRelease\client.dll
+D:\Mes jeux\MiniJeu\client\.mono\temp\bin\ExportRelease\client.pdb
+D:\Mes jeux\MiniJeu\client\.mono\temp\obj\ExportRelease\client.csproj.AssemblyReference.cache
+D:\Mes jeux\MiniJeu\client\.mono\temp\obj\ExportRelease\client.GeneratedMSBuildEditorConfig.editorconfig
+D:\Mes jeux\MiniJeu\client\.mono\temp\obj\ExportRelease\client.AssemblyInfoInputs.cache
+D:\Mes jeux\MiniJeu\client\.mono\temp\obj\ExportRelease\client.AssemblyInfo.cs
+D:\Mes jeux\MiniJeu\client\.mono\temp\obj\ExportRelease\client.csproj.CoreCompileInputs.cache
+D:\Mes jeux\MiniJeu\client\.mono\temp\obj\ExportRelease\client.dll
+D:\Mes jeux\MiniJeu\client\.mono\temp\obj\ExportRelease\client.pdb

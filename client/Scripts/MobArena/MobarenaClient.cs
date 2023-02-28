@@ -12,7 +12,7 @@ public class MobarenaClient : Node2D
     [Export] NodePath otherPlayerContainerPath;
     Node2D otherPlayerContainer;
 
-    public static IPAddress ip = IPAddress.Parse("127.0.0.1");
+    public static IPAddress ip = IPAddress.Parse("25.64.184.155");
     public static TcpClient tcpClient = new TcpClient();
     public static NetworkStream stream;
     public static System.Threading.Thread listeningThread;
@@ -47,7 +47,7 @@ public class MobarenaClient : Node2D
     {
         while (true)
         {
-            byte[] lResponseBuffer = new byte[1024];
+            byte[] lResponseBuffer = new byte[4096];
             int lResponseLength = stream.Read(lResponseBuffer, 0, lResponseBuffer.Length);
             if (lResponseLength != 0)
             {
@@ -70,8 +70,8 @@ public class MobarenaClient : Node2D
 
                             if(playerId != id)
                             {
-                                Vector2 playerPos = new Vector2(lPlayerData[1].ToInt(), lPlayerData[2].ToInt());
-                                int playerRot = lPlayerData[3].ToInt();
+                                Vector2 playerPos = new Vector2(lPlayerData[1].ToFloat(), lPlayerData[2].ToFloat());
+                                float playerRot = lPlayerData[3].ToFloat();
 
                                 MobArenaOtherPlayer lPlayer = ReturnIfExistInList(playerId);
 
@@ -124,8 +124,9 @@ public class MobarenaClient : Node2D
     {
         if (what == MainLoop.NotificationWmQuitRequest)
         {
-            SendMessage("player_disconnect");
+            SendMessage("DISCONNECT");
             listeningThread.Abort();
+            positionThread.Abort();
             stream.Close();
             tcpClient.Close();
         }
