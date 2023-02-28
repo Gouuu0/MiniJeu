@@ -40,6 +40,7 @@ public class MobarenaClient : Node2D
     public static void SendMessage(string pMessage)
     {
         byte[] lMessage = Encoding.ASCII.GetBytes(pMessage);
+        stream.Flush();
         stream.Write(lMessage, 0, lMessage.Length);
     }
 
@@ -83,7 +84,9 @@ public class MobarenaClient : Node2D
                                     otherPlayerList.Add(lPlayer);
                                 }
 
-                                lPlayer.Position = playerPos;
+                                lPlayer.moveTween.StopAll();
+                                lPlayer.moveTween.InterpolateProperty(lPlayer, "position", lPlayer.Position, playerPos, .25f);
+                                lPlayer.moveTween.Start();
                                 lPlayer.RotationDegrees = playerRot;
                             }
                         }
