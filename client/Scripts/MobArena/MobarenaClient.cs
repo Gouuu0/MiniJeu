@@ -83,9 +83,7 @@ public class MobarenaClient : Node2D
                                     otherPlayerList.Add(lPlayer);
                                 }
 
-                                lPlayer.moveTween.StopAll();
-                                lPlayer.moveTween.InterpolateProperty(lPlayer, "position", lPlayer.Position, playerPos, .25f);
-                                lPlayer.moveTween.Start();
+                                lPlayer.Position = playerPos;
                                 lPlayer.RotationDegrees = playerRot;
                             }
                         }
