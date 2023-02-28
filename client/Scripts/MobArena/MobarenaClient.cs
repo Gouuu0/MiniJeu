@@ -12,7 +12,7 @@ public class MobarenaClient : Node2D
     [Export] NodePath otherPlayerContainerPath;
     Node2D otherPlayerContainer;
 
-    public static IPAddress ip = IPAddress.Parse("25.64.184.155");
+    public static IPAddress ip = IPAddress.Parse("25.79.251.169");
     public static TcpClient tcpClient = new TcpClient();
     public static NetworkStream stream;
     public static System.Threading.Thread listeningThread;
