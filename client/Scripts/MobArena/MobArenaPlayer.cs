@@ -3,9 +3,18 @@ using System;
 
 public class MobArenaPlayer : MobArenaShooter
 {
+    public static MobArenaPlayer Instance;
+
     [Export] float SHOOT_PUSHBACK_FORCE = 3;
     [Export] float SLIP_FORCE = 1.2f;
     [Export] float SHIFT_SPEED_DIVIDOR = 4;
+
+    public override void _Ready()
+    {
+        Instance = this;
+
+        base._Ready();
+    }
 
     public override void _Process(float delta)
     {
