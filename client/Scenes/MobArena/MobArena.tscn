@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Scenes/MobArena/MobArenaPlayer.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Scripts/MobArena/MobarenaClient.cs" type="Script" id=2]
+
+[node name="Main" type="Node2D"]
+script = ExtResource( 2 )
+
+[node name="ObjectsContainer" type="Node2D" parent="."]
+
+[node name="PlayerContainer" type="Node2D" parent="ObjectsContainer"]
+
+[node name="Player" parent="." instance=ExtResource( 1 )]
+position = Vector2( 467, 308 )

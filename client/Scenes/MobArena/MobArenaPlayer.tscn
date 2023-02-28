@@ -1,0 +1,26 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Scripts/MobArena/MobArenaPlayer.cs" type="Script" id=1]
+
+[sub_resource type="CircleShape2D" id=1]
+
+[node name="Player" type="Node2D"]
+script = ExtResource( 1 )
+TEAM = 1
+BASE_SPEED = 1.0
+GUN_POSITION_PATH = NodePath("CanonPlace")
+SHOOT_PUSHBACK_FORCE = 1.0
+
+[node name="Body" type="Polygon2D" parent="."]
+position = Vector2( 1, 1 )
+polygon = PoolVector2Array( -16, -13, 16, -12, 16, 10, -16, 10 )
+
+[node name="CanonPlace" type="Node2D" parent="."]
+
+[node name="Position2D" type="Position2D" parent="CanonPlace"]
+position = Vector2( 18, 0 )
+
+[node name="HitBox" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitBox"]
+shape = SubResource( 1 )
